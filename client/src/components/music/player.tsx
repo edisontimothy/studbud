@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,16 @@ export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const [isFloating, setIsFloating] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    // Set up audio source when component mounts
+    if (audioRef.current) {
+      audioRef.current.src = "/Colorful-Flowers(chosic.com).mp3";
+      audioRef.current.volume = volume;
+    }
+  }, []);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -39,34 +46,19 @@ export default function MusicPlayer() {
     }
   };
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime);
-    }
-  };
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
-
   const PlayerContent = () => (
     <div className={`space-y-4 ${isFloating ? 'p-4 bg-background border rounded-lg shadow-lg' : ''}`}>
-      <div className="w-full aspect-video">
-        <iframe
-          width="100%"
-          height="100%"
-          src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1&enablejsapi=1&playsinline=1&rel=0"
-          title="Study Music"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={togglePlay}
+            className="h-10 w-10"
+          >
+            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          </Button>
+
           <Button
             variant="outline"
             size="icon"
@@ -107,9 +99,8 @@ export default function MusicPlayer() {
 
       <audio
         ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
         onEnded={() => setIsPlaying(false)}
-        className="hidden"
+        loop
       >
         Your browser does not support the audio element.
       </audio>

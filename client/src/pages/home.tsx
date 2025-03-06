@@ -18,7 +18,7 @@ function WelcomeSection() {
 
   return (
     <div className="mb-8">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2">
         <h1 className="text-3xl font-bold text-primary">Welcome to StudBud</h1>
         <Button
           variant="ghost"
@@ -42,11 +42,11 @@ function WelcomeSection() {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <p className="text-muted-foreground mb-4">
+            <p className="mt-4 text-muted-foreground">
               StudBud is your all-in-one study companion designed to enhance your learning experience.
               Our comprehensive suite of tools includes:
             </p>
-            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <ul className="mt-2 list-disc list-inside space-y-2 text-muted-foreground">
               <li>A Kanban board for organizing and tracking your tasks</li>
               <li>Pomodoro and stopwatch timers to manage your study sessions</li>
               <li>Built-in study music player that stays with you across tabs</li>
@@ -97,7 +97,7 @@ function Dashboard() {
   return (
     <div className="space-y-8">
       <WelcomeSection />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map((feature) => (
           <motion.div
             key={feature.title}
@@ -137,7 +137,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-6 py-4">
           <h1 className="text-2xl font-bold text-primary">StudBud</h1>
           <p className="text-muted-foreground mt-1">
             Your all-in-one study companion
@@ -145,9 +145,9 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue={defaultTab} className="space-y-8">
-          <TabsList>
+          <TabsList className="mb-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="timer">Timer</TabsTrigger>
@@ -165,7 +165,9 @@ export default function Home() {
               title="Task Management"
               description="Organize and track your tasks using a Kanban board. Create columns to represent different stages of your work, add tasks with details like due dates and priority levels, and easily drag and drop them between columns as you make progress."
             />
-            <KanbanBoard />
+            <div className="mt-6">
+              <KanbanBoard />
+            </div>
           </TabsContent>
 
           <TabsContent value="timer" className="space-y-8">
@@ -174,14 +176,18 @@ export default function Home() {
                 title="Pomodoro Timer"
                 description="Stay focused with the Pomodoro Technique. Work for 25 minutes, then take a 5-minute break. After 4 cycles, take a longer 30-minute break. Customize the intervals to match your study style."
               />
-              <PomodoroTimer />
+              <div className="mt-6">
+                <PomodoroTimer />
+              </div>
             </div>
             <div>
               <SectionHeader
                 title="Stopwatch"
                 description="Track the time spent on your tasks with a simple stopwatch. Start, pause, and reset as needed to monitor your study sessions."
               />
-              <StopwatchTimer />
+              <div className="mt-6">
+                <StopwatchTimer />
+              </div>
             </div>
           </TabsContent>
 
@@ -190,7 +196,9 @@ export default function Home() {
               title="Study Music"
               description="Listen to focus-enhancing music while you study. Toggle the floating player to keep the music playing as you navigate between different sections of StudBud or other tabs."
             />
-            <MusicPlayer />
+            <div className="mt-6">
+              <MusicPlayer />
+            </div>
           </TabsContent>
 
           <TabsContent value="reading">
@@ -198,7 +206,9 @@ export default function Home() {
               title="Reading List"
               description="Save and organize your study materials, articles, and resources. Create groups to categorize related materials and open multiple links at once when you're ready to study."
             />
-            <ReadingList />
+            <div className="mt-6">
+              <ReadingList />
+            </div>
           </TabsContent>
 
           <TabsContent value="dictionary">
@@ -206,7 +216,9 @@ export default function Home() {
               title="Dictionary"
               description="Quick access to word definitions. Look up unfamiliar terms while studying to enhance your understanding and vocabulary."
             />
-            <DictionaryLookup />
+            <div className="mt-6">
+              <DictionaryLookup />
+            </div>
           </TabsContent>
         </Tabs>
       </main>
