@@ -57,7 +57,7 @@ export default function MusicPlayer() {
         <iframe
           width="100%"
           height="100%"
-          src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0"
+          src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1"
           title="Study Music"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -71,6 +71,7 @@ export default function MusicPlayer() {
             variant="outline"
             size="icon"
             onClick={toggleMute}
+            className="h-8 w-8"
           >
             {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           </Button>
@@ -86,10 +87,21 @@ export default function MusicPlayer() {
 
         <Button
           variant="outline"
-          size="icon"
+          size="sm"
           onClick={() => setIsFloating(!isFloating)}
+          className="flex items-center gap-2"
         >
-          {isFloating ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          {isFloating ? (
+            <>
+              <Minimize2 className="h-4 w-4" />
+              <span>Dock Player</span>
+            </>
+          ) : (
+            <>
+              <Maximize2 className="h-4 w-4" />
+              <span>Float Player</span>
+            </>
+          )}
         </Button>
       </div>
 

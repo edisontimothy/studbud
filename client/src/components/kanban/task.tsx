@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, Trash2 } from "lucide-react";
+import { Calendar, Trash2, Pencil } from "lucide-react";
 import { Task, Column } from "@shared/schema";
 import { saveTasks, saveColumns } from "@/lib/storage";
 
@@ -112,9 +112,6 @@ export default function KanbanTask({
           <Button size="sm" onClick={handleSave}>
             Save
           </Button>
-          <Button variant="destructive" size="sm" onClick={handleDelete}>
-            Delete
-          </Button>
         </div>
       </Card>
     );
@@ -129,7 +126,10 @@ export default function KanbanTask({
     >
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
-          <div className="space-y-1">
+          <div 
+            className="space-y-1 flex-1 cursor-pointer" 
+            onClick={() => setIsEditing(true)}
+          >
             <h3 className="font-medium">{task.title}</h3>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               {task.dueDate && (
@@ -145,10 +145,23 @@ export default function KanbanTask({
             <span className={`px-2 py-1 rounded-full text-xs ${priorityColors[task.priority]}`}>
               {task.priority}
             </span>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={(e) => {
-              e.stopPropagation();
-              handleDelete();
-            }}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+              onClick={() => setIsEditing(true)}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
+              }}
+            >
               <Trash2 className="h-4 w-4 text-red-500" />
             </Button>
           </div>
