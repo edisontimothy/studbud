@@ -1,0 +1,61 @@
+Project Objective
+Design and prototype a web application to help people manage their study sessions.
+
+Target Audience
+We know this online platform will be useful for students. Identify which sub-
+group(s) of this audience you think could benefit the most
+
+Background
+Prior thought and planning is essential for productive study sessions. There are many theories about planning and managing study sessions, and even more online tools which put these theories into practice. Our competitive analysis shows that these tools fall into two distinct categories:
+
+1. Planning Tools (e.g. study calendars, time schedules)
+2. Content Tools (e.g. flash cards, quiz apps)
+3. 
+Studbud is designed as we identified a gap in the market for a platform which focusses on managing individual study sessions. This web-based application should combine planning and content functionality, to equip students with the tools they need for a productive study session.
+
+Managing Study and Work Sessions
+There are 3 areas of focus for your web-application:
+1. Task Management
+Dividing up tasks, visualising priorities
+2. Time Management
+Just like study planning methods, there are many methods for managing time. We know that study is
+effective for a limited amount of productive time, after which it is important to take a break.
+3. Content Management
+This is specific to the type of study or work you are doing, unlike task and time management which
+are more universal.
+
+Primary Features (Your web app must include all of these)
+
+1. Task List -  Kanban Board 
+• Users should be able to see tasks from their task list
+• Users should be able to create and name columns
+• Users should be able to drag and drop tasks between columns
+• Users should be able to enter individual tasks.
+• Users should be able to further define:
+• Due date (Calendar Date)
+• Priority rating (Low/Med/High)
+• Estimated time to complete (Hours and Minutes)
+• Completion status (Done/Not Done)
+• Tasks should be editable / deletable
+
+2. Stopwatch Timer - Pomodoro Timer
+• Users should be able to start, stop, reset the timer with buttons
+• Users should be able to edit pomodoro session and break times
+• Default times = 25 mins on, 5 mins off (x4) then 30 mins break
+• Users should be able to start, stop and reset a timer (counting upwards)
+• User's should be able to see the current time elapsed
+
+3. Music Player
+• Users should be able to listen to music through an embedded player, i've attached the music in this file
+
+4.Reading List Creator
+• Users should be able to add, edit and delete links to reference materials
+• Users should be able to save groups of links and open all of them at once
+
+Technical Requirements
+• The web app should have a page title and favicon
+• The web app should have a home page / landing page dashboard that is accessible and user friendly
+• The web app should include appropriate HTML metatags
+• The web app should be usable on both mobile and desktop devices
+• The web app should apply design principles and patterns for a consistent and enjoyable UX
+• The overall arching theme should be green (#275427) and white (#ffffff) 
