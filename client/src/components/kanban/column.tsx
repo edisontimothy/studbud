@@ -38,6 +38,22 @@ export default function KanbanColumn({
     setIsEditing(false);
   };
 
+  const handleDelete = () => {
+    // First remove tasks associated with this column
+    setTasks(currentTasks => {
+      const newTasks = currentTasks.filter(task => task.columnId !== column.id);
+      saveTasks(newTasks);
+      return newTasks;
+    });
+
+    // Then remove the column
+    setColumns(currentColumns => {
+      const newColumns = currentColumns.filter(col => col.id !== column.id);
+      saveColumns(newColumns);
+      return newColumns;
+    });
+  };
+
   const addTask = () => {
     const newTask: Task = {
       id: nanoid(),
@@ -84,9 +100,19 @@ export default function KanbanColumn({
             {title}
           </CardTitle>
         )}
-        <Button variant="ghost" size="sm" onClick={addTask}>
-          <Plus className="h-4 w-4" />
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" onClick={addTask}>
+            <Plus className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleDelete}
+            className="text-red-500 hover:text-red-600"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </CardHeader>
 
       <CardContent

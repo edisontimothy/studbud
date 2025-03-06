@@ -119,7 +119,7 @@ export default function MusicPlayer() {
   if (isFloating) {
     return (
       <Portal.Root>
-        <div className="fixed bottom-4 right-4 z-50 w-80">
+        <div className="fixed bottom-4 right-4 z-[9999] w-80">
           <PlayerContent />
         </div>
       </Portal.Root>
