@@ -2,16 +2,17 @@ import { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Maximize2, Minimize2 } from "lucide-react";
+import * as Portal from '@radix-ui/react-portal';
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [isFloating, setIsFloating] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Using embedded YouTube music player as a fallback since we can't include MP3 files
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -50,21 +51,21 @@ export default function MusicPlayer() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  return (
-    <Card>
-      <CardContent className="pt-6 space-y-4">
-        <div className="w-full aspect-video">
-          <iframe
-            width="100%"
-            height="100%"
-            src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0"
-            title="Study Music"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
+  const PlayerContent = () => (
+    <div className={`space-y-4 ${isFloating ? 'p-4 bg-background border rounded-lg shadow-lg' : ''}`}>
+      <div className="w-full aspect-video">
+        <iframe
+          width="100%"
+          height="100%"
+          src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0"
+          title="Study Music"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
 
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
@@ -73,7 +74,7 @@ export default function MusicPlayer() {
           >
             {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
           </Button>
-          
+
           <Slider
             value={[isMuted ? 0 : volume]}
             max={1}
@@ -83,14 +84,40 @@ export default function MusicPlayer() {
           />
         </div>
 
-        <audio
-          ref={audioRef}
-          onTimeUpdate={handleTimeUpdate}
-          onEnded={() => setIsPlaying(false)}
-          className="hidden"
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setIsFloating(!isFloating)}
         >
-          Your browser does not support the audio element.
-        </audio>
+          {isFloating ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        </Button>
+      </div>
+
+      <audio
+        ref={audioRef}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={() => setIsPlaying(false)}
+        className="hidden"
+      >
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  );
+
+  if (isFloating) {
+    return (
+      <Portal.Root>
+        <div className="fixed bottom-4 right-4 z-50 w-80">
+          <PlayerContent />
+        </div>
+      </Portal.Root>
+    );
+  }
+
+  return (
+    <Card>
+      <CardContent className="pt-6">
+        <PlayerContent />
       </CardContent>
     </Card>
   );

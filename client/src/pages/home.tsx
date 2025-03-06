@@ -4,6 +4,7 @@ import PomodoroTimer from "@/components/timer/pomodoro";
 import StopwatchTimer from "@/components/timer/stopwatch";
 import MusicPlayer from "@/components/music/player";
 import ReadingList from "@/components/reading/list";
+import DictionaryLookup from "@/components/dictionary/lookup";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
             <TabsTrigger value="timer">Timer</TabsTrigger>
             <TabsTrigger value="music">Music</TabsTrigger>
             <TabsTrigger value="reading">Reading List</TabsTrigger>
+            <TabsTrigger value="dictionary">Dictionary</TabsTrigger>
           </TabsList>
 
           <TabsContent value="tasks">
@@ -44,6 +46,10 @@ export default function Home() {
 
           <TabsContent value="reading">
             <ReadingList />
+          </TabsContent>
+
+          <TabsContent value="dictionary">
+            <DictionaryLookup />
           </TabsContent>
         </Tabs>
       </main>

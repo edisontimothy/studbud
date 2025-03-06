@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "lucide-react";
+import { Calendar, Trash2 } from "lucide-react";
 import { Task, Column } from "@shared/schema";
 import { saveTasks, saveColumns } from "@/lib/storage";
 
@@ -76,7 +76,7 @@ export default function KanbanTask({
           onChange={e => setEditedTask({ ...editedTask, title: e.target.value })}
           placeholder="Task title"
         />
-        
+
         <div className="flex gap-2">
           <Select
             value={editedTask.priority}
@@ -112,6 +112,9 @@ export default function KanbanTask({
           <Button size="sm" onClick={handleSave}>
             Save
           </Button>
+          <Button variant="destructive" size="sm" onClick={handleDelete}>
+            Delete
+          </Button>
         </div>
       </Card>
     );
@@ -123,7 +126,6 @@ export default function KanbanTask({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       className="cursor-move"
-      onClick={() => setIsEditing(true)}
     >
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
@@ -139,9 +141,17 @@ export default function KanbanTask({
               <span>{task.estimatedTime}</span>
             </div>
           </div>
-          <span className={`px-2 py-1 rounded-full text-xs ${priorityColors[task.priority]}`}>
-            {task.priority}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={`px-2 py-1 rounded-full text-xs ${priorityColors[task.priority]}`}>
+              {task.priority}
+            </span>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={(e) => {
+              e.stopPropagation();
+              handleDelete();
+            }}>
+              <Trash2 className="h-4 w-4 text-red-500" />
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
