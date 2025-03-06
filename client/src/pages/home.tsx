@@ -113,9 +113,9 @@ function Dashboard() {
                     className="w-full h-full text-left flex items-start gap-4 p-4"
                   >
                     <feature.icon className="h-6 w-6 shrink-0 text-primary" />
-                    <div className="min-w-0">
-                      <h3 className="font-semibold truncate">{feature.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-ellipsis overflow-hidden">{feature.title}</h3>
+                      <p className="text-sm text-muted-foreground mt-1 whitespace-normal">
                         {feature.description}
                       </p>
                     </div>

@@ -168,9 +168,9 @@ export default function ReadingList() {
     });
   };
 
-  const moveLink = (linkId: string, newGroupId: string | undefined) => {
+  const moveLink = (linkId: string, newGroupId: string | null) => {
     const updatedLinks = links.map(link =>
-      link.id === linkId ? { ...link, groupId: newGroupId } : link
+      link.id === linkId ? { ...link, groupId: newGroupId || undefined } : link
     );
     setLinks(updatedLinks);
     saveLinks(updatedLinks);
@@ -292,14 +292,14 @@ export default function ReadingList() {
                   </a>
                   <div className="flex gap-2">
                     <Select
-                      value={link.groupId || ""}
-                      onValueChange={(value) => moveLink(link.id, value || undefined)}
+                      value={link.groupId || "ungrouped"}
+                      onValueChange={(value) => moveLink(link.id, value === "ungrouped" ? null : value)}
                     >
                       <SelectTrigger className="w-[150px]">
                         <SelectValue placeholder="Move to group" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Ungrouped</SelectItem>
+                        <SelectItem value="ungrouped">Ungrouped</SelectItem>
                         {groups.map(g => (
                           <SelectItem key={g.id} value={g.id}>
                             {g.name}
