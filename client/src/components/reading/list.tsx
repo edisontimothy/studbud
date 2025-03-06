@@ -151,7 +151,7 @@ export default function ReadingList() {
 
   const deleteGroup = (groupId: string) => {
     // First, update all links that were in this group to be ungrouped
-    const updatedLinks = links.map(link => 
+    const updatedLinks = links.map(link =>
       link.groupId === groupId ? { ...link, groupId: undefined } : link
     );
     setLinks(updatedLinks);
@@ -178,7 +178,7 @@ export default function ReadingList() {
     // Update group linkIds
     const updatedGroups = groups.map(group => ({
       ...group,
-      linkIds: newGroupId === group.id 
+      linkIds: newGroupId === group.id
         ? [...group.linkIds, linkId]
         : group.linkIds.filter(id => id !== linkId)
     }));
@@ -269,8 +269,8 @@ export default function ReadingList() {
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Open All
                 </Button>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="icon"
                   onClick={() => deleteGroup(group.id)}
                   className="text-red-500 hover:text-red-600"
@@ -329,10 +329,7 @@ export default function ReadingList() {
             <h3 className="text-lg font-semibold mb-4">Ungrouped Links</h3>
             <div className="space-y-2">
               {ungroupedLinks.map(link => (
-                <div
-                  key={link.id}
-                  className="flex items-center justify-between p-2 rounded-lg border"
-                >
+                <div key={link.id} className="flex items-center justify-between p-2 rounded-lg border">
                   <a
                     href={link.url}
                     target="_blank"
@@ -342,6 +339,22 @@ export default function ReadingList() {
                     {link.title}
                   </a>
                   <div className="flex gap-2">
+                    <Select
+                      value={link.groupId || "ungrouped"}
+                      onValueChange={(value) => moveLink(link.id, value === "ungrouped" ? null : value)}
+                    >
+                      <SelectTrigger className="w-[150px]">
+                        <SelectValue placeholder="Move to group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ungrouped">Ungrouped</SelectItem>
+                        {groups.map(g => (
+                          <SelectItem key={g.id} value={g.id}>
+                            {g.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button
