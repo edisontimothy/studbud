@@ -97,7 +97,7 @@ function Dashboard() {
   return (
     <div className="space-y-8">
       <WelcomeSection />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {features.map((feature) => (
           <motion.div
             key={feature.title}
@@ -137,7 +137,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container max-w-7xl mx-auto px-6 py-4">
           <h1 className="text-2xl font-bold text-primary">StudBud</h1>
           <p className="text-muted-foreground mt-1">
             Your all-in-one study companion
@@ -145,7 +145,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-8">
+      <main className="container max-w-7xl mx-auto px-6 py-8">
         <Tabs defaultValue={defaultTab} className="space-y-8">
           <TabsList className="mb-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
