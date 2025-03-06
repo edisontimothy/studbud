@@ -66,7 +66,7 @@ export default function ReadingList() {
     saveLinks(updatedLinks);
 
     setNewLink({ url: "", title: "", groupId: "" });
-    
+
     toast({
       title: "Link added",
       description: "Your link has been added to the reading list",
@@ -98,10 +98,18 @@ export default function ReadingList() {
     });
   };
 
-  const deleteLink = (id: string) => {
+  const handleDelete = (id: string) => {
     const updatedLinks = links.filter(link => link.id !== id);
     setLinks(updatedLinks);
     saveLinks(updatedLinks);
+
+    // Also remove the link from any groups that contain it
+    const updatedGroups = groups.map(group => ({
+      ...group,
+      linkIds: group.linkIds.filter(linkId => linkId !== id)
+    }));
+    setGroups(updatedGroups);
+    saveLinkGroups(updatedGroups);
 
     toast({
       title: "Link deleted",
@@ -138,6 +146,48 @@ export default function ReadingList() {
     toast({
       title: "Opening links",
       description: `Opening ${groupLinks.length} links from the group`,
+    });
+  };
+
+  const deleteGroup = (groupId: string) => {
+    // First, update all links that were in this group to be ungrouped
+    const updatedLinks = links.map(link => 
+      link.groupId === groupId ? { ...link, groupId: undefined } : link
+    );
+    setLinks(updatedLinks);
+    saveLinks(updatedLinks);
+
+    // Then remove the group
+    const updatedGroups = groups.filter(group => group.id !== groupId);
+    setGroups(updatedGroups);
+    saveLinkGroups(updatedGroups);
+
+    toast({
+      title: "Group deleted",
+      description: "The group has been removed from your reading list",
+    });
+  };
+
+  const moveLink = (linkId: string, newGroupId: string | undefined) => {
+    const updatedLinks = links.map(link =>
+      link.id === linkId ? { ...link, groupId: newGroupId } : link
+    );
+    setLinks(updatedLinks);
+    saveLinks(updatedLinks);
+
+    // Update group linkIds
+    const updatedGroups = groups.map(group => ({
+      ...group,
+      linkIds: newGroupId === group.id 
+        ? [...group.linkIds, linkId]
+        : group.linkIds.filter(id => id !== linkId)
+    }));
+    setGroups(updatedGroups);
+    saveLinkGroups(updatedGroups);
+
+    toast({
+      title: "Link moved",
+      description: "The link has been moved to a different group",
     });
   };
 
@@ -214,17 +264,24 @@ export default function ReadingList() {
           <CardContent className="pt-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">{group.name}</h3>
-              <Button onClick={() => openGroupLinks(group.id)}>
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Open All
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={() => openGroupLinks(group.id)}>
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Open All
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  onClick={() => deleteGroup(group.id)}
+                  className="text-red-500 hover:text-red-600"
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
             <div className="space-y-2">
               {group.links.map(link => (
-                <div
-                  key={link.id}
-                  className="flex items-center justify-between p-2 rounded-lg border"
-                >
+                <div key={link.id} className="flex items-center justify-between p-2 rounded-lg border">
                   <a
                     href={link.url}
                     target="_blank"
@@ -234,47 +291,26 @@ export default function ReadingList() {
                     {link.title}
                   </a>
                   <div className="flex gap-2">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setEditingLink(link)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit Link</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <Input
-                            placeholder="URL"
-                            value={editingLink?.url}
-                            onChange={e =>
-                              setEditingLink(link => 
-                                link ? { ...link, url: e.target.value } : null
-                              )
-                            }
-                          />
-                          <Input
-                            placeholder="Title"
-                            value={editingLink?.title}
-                            onChange={e =>
-                              setEditingLink(link =>
-                                link ? { ...link, title: e.target.value } : null
-                              )
-                            }
-                          />
-                          <Button onClick={updateLink}>Save Changes</Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                    <Select
+                      value={link.groupId || ""}
+                      onValueChange={(value) => moveLink(link.id, value || undefined)}
+                    >
+                      <SelectTrigger className="w-[150px]">
+                        <SelectValue placeholder="Move to group" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">Ungrouped</SelectItem>
+                        {groups.map(g => (
+                          <SelectItem key={g.id} value={g.id}>
+                            {g.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => deleteLink(link.id)}
+                      onClick={() => handleDelete(link.id)}
                     >
                       <Trash className="h-4 w-4" />
                     </Button>
@@ -346,7 +382,7 @@ export default function ReadingList() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => deleteLink(link.id)}
+                      onClick={() => handleDelete(link.id)}
                     >
                       <Trash className="h-4 w-4" />
                     </Button>
