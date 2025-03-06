@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,56 @@ import StopwatchTimer from "@/components/timer/stopwatch";
 import MusicPlayer from "@/components/music/player";
 import ReadingList from "@/components/reading/list";
 import DictionaryLookup from "@/components/dictionary/lookup";
-import { Clock, Layout, Music, BookOpen, Book } from "lucide-react";
+import { Clock, Layout, Music, BookOpen, Book, ChevronDown, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
+
+function WelcomeSection() {
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  return (
+    <div className="mb-8">
+      <div className="flex items-center gap-2 mb-4">
+        <h1 className="text-3xl font-bold text-primary">Welcome to StudBud</h1>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="h-8 w-8 p-0"
+        >
+          {isExpanded ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <p className="text-muted-foreground mb-4">
+              StudBud is your all-in-one study companion designed to enhance your learning experience.
+              Our comprehensive suite of tools includes:
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+              <li>A Kanban board for organizing and tracking your tasks</li>
+              <li>Pomodoro and stopwatch timers to manage your study sessions</li>
+              <li>Built-in study music player that stays with you across tabs</li>
+              <li>Reading list manager to organize your study materials</li>
+              <li>Quick dictionary lookup for expanding your vocabulary</li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 function Dashboard() {
   const features = [
@@ -46,27 +95,37 @@ function Dashboard() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {features.map((feature) => (
-        <Card key={feature.title}>
-          <CardContent className="pt-6">
-            <Link href={feature.href}>
-              <Button
-                variant="ghost"
-                className="w-full h-full text-left flex items-start gap-4 p-4"
-              >
-                <feature.icon className="h-6 w-6 text-primary" />
-                <div>
-                  <h3 className="font-semibold">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </div>
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="space-y-8">
+      <WelcomeSection />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {features.map((feature) => (
+          <motion.div
+            key={feature.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Card>
+              <CardContent className="pt-6">
+                <Link href={feature.href}>
+                  <Button
+                    variant="ghost"
+                    className="w-full h-full text-left flex items-start gap-4 p-4"
+                  >
+                    <feature.icon className="h-6 w-6 text-primary" />
+                    <div>
+                      <h3 className="font-semibold">{feature.title}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

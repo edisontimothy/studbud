@@ -57,7 +57,7 @@ export default function MusicPlayer() {
         <iframe
           width="100%"
           height="100%"
-          src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1"
+          src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&controls=1&enablejsapi=1&playsinline=1&rel=0"
           title="Study Music"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

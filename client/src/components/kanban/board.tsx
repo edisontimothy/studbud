@@ -3,6 +3,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { nanoid } from "nanoid";
+import { motion, AnimatePresence } from "framer-motion";
 import { Task, Column } from "@shared/schema";
 import { getTasks, saveTasks, getColumns, saveColumns } from "@/lib/storage";
 import KanbanColumn from "./column";
@@ -14,7 +15,7 @@ export default function KanbanBoard() {
   useEffect(() => {
     setTasks(getTasks());
     setColumns(getColumns());
-    
+
     // Initialize default columns if none exist
     if (getColumns().length === 0) {
       const defaultColumns: Column[] = [
@@ -86,19 +87,29 @@ export default function KanbanBoard() {
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {columns.map(column => (
-            <Droppable key={column.id} droppableId={column.id}>
-              {(provided) => (
-                <KanbanColumn
-                  column={column}
-                  tasks={tasks.filter(task => column.taskIds.includes(task.id))}
-                  provided={provided}
-                  setTasks={setTasks}
-                  setColumns={setColumns}
-                />
-              )}
-            </Droppable>
-          ))}
+          <AnimatePresence>
+            {columns.map(column => (
+              <motion.div
+                key={column.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Droppable droppableId={column.id}>
+                  {(provided) => (
+                    <KanbanColumn
+                      column={column}
+                      tasks={tasks.filter(task => column.taskIds.includes(task.id))}
+                      provided={provided}
+                      setTasks={setTasks}
+                      setColumns={setColumns}
+                    />
+                  )}
+                </Droppable>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </DragDropContext>
     </div>
