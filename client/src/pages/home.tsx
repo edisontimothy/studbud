@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -131,8 +132,16 @@ function Dashboard() {
 }
 
 export default function Home() {
-  const searchParams = new URLSearchParams(window.location.search);
-  const defaultTab = searchParams.get('tab') || 'dashboard';
+  const [location] = useLocation();
+  const [activeTab, setActiveTab] = useState('dashboard');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [location]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -146,7 +155,7 @@ export default function Home() {
       </header>
 
       <main className="container max-w-7xl mx-auto px-6 py-8">
-        <Tabs defaultValue={defaultTab} className="space-y-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
           <TabsList className="mb-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>

@@ -39,6 +39,15 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
+  // Serve static files in production
+  if (process.env.NODE_ENV === 'production') {
+    const distPath = path.resolve(__dirname, '../dist/public');
+    app.use(express.static(distPath));
+    app.get('*', (_req, res) => {
+      res.sendFile(path.resolve(distPath, 'index.html'));
+    });
+  }
+
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -53,7 +62,14 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // In production, serve static files first
+    const distPath = path.resolve(process.cwd(), "dist/public");
+    app.use(express.static(distPath));
+    
+    // Then handle all other routes by serving index.html
+    app.get("*", (_req, res) => {
+      res.sendFile(path.resolve(distPath, "index.html"));
+    });
   }
 
   // In production (Vercel), we don't need to specify a port as it's handled by the platform
