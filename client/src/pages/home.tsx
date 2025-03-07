@@ -132,7 +132,7 @@ function Dashboard() {
 }
 
 export default function Home() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState('dashboard');
 
   useEffect(() => {
@@ -142,6 +142,11 @@ export default function Home() {
       setActiveTab(tab);
     }
   }, [location]);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setLocation(`/?tab=${value}`);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -155,7 +160,7 @@ export default function Home() {
       </header>
 
       <main className="container max-w-7xl mx-auto px-6 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
           <TabsList className="mb-4">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
