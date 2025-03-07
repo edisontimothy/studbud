@@ -53,7 +53,14 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    serveStatic(app);
+    // In production, serve static files first
+    const distPath = path.resolve(__dirname, "public");
+    app.use(express.static(distPath));
+    
+    // Then handle all other routes by serving index.html
+    app.get("*", (_req, res) => {
+      res.sendFile(path.resolve(distPath, "index.html"));
+    });
   }
 
   // In production (Vercel), we don't need to specify a port as it's handled by the platform
