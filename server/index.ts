@@ -56,10 +56,15 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client
-  const port = 5000;
-  server.listen(port, () => {
-    log(`serving on port ${port}`);
-  });
+  // In production (Vercel), we don't need to specify a port as it's handled by the platform
+  // In development, we'll use port 5000
+  if (process.env.NODE_ENV !== 'production') {
+    const port = process.env.PORT || 5000;
+    server.listen(port, () => {
+      log(`serving on port ${port}`);
+    });
+  } else {
+    // For Vercel serverless environment
+    log('Running in production mode (serverless)');
+  }
 })();
