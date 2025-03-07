@@ -63,11 +63,7 @@ app.use((req, res, next) => {
     await setupVite(app, server);
   } else {
     // In production, serve static files first
-<<<<<<< HEAD
-    const distPath = path.resolve(process.cwd(), "dist/public");
-=======
-    const distPath = path.resolve(__dirname, "public");
->>>>>>> 86b51fa2ea63758fbfde5e83bff854201824d151
+    const distPath = path.resolve(__dirname, "../dist/public");
     app.use(express.static(distPath));
     
     // Then handle all other routes by serving index.html
